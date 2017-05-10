@@ -9,6 +9,7 @@
       - listen: "8080 default_server"
         ssl_certificate_key: "/etc/ssl/default_server/default_server.key"
         ssl_certificate: "/etc/ssl/default_server/default_server.pem"
+        server_name: "girder-hardened"
         extra_parameters: |
           ssl on;
           ssl_certificate_key /etc/ssl/default_server/default_server.key;
