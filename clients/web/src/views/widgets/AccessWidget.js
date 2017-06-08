@@ -83,10 +83,10 @@ var AccessWidget = View.extend({
             this.flagList = [];
         }
 
-        $.when(
+        Promsie.all([
             flagListPromise,
             this.model.fetchAccess()
-        ).done(() => {
+        ]).then(() => {
             this.render();
         });
     },

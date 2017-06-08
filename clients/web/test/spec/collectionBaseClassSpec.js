@@ -36,7 +36,7 @@ describe('Test normal collection operation', function () {
     it('create several dummy api keys', function () {
         var done = canary();
 
-        var createPromise = $.when(
+        var createPromise = Promise.all([
             new girder.models.ApiKeyModel({ name: 'test0' }).save(),
             new girder.models.ApiKeyModel({ name: 'test1' }).save(),
             new girder.models.ApiKeyModel({ name: 'test2' }).save(),
@@ -47,7 +47,7 @@ describe('Test normal collection operation', function () {
             new girder.models.ApiKeyModel({ name: 'test7' }).save(),
             new girder.models.ApiKeyModel({ name: 'test8' }).save(),
             new girder.models.ApiKeyModel({ name: 'test9' }).save()
-        );
+        ]);
 
         var collection;
 
@@ -59,7 +59,7 @@ describe('Test normal collection operation', function () {
             return collection.fetch();
         });
 
-        $.when(createPromise, fetchPromise).done(function () {
+        Promise.all([createPromise, fetchPromise]).done(function () {
             expect(collection.length).toBe(10);
         }).fail(failIfError).always(done);
 
@@ -195,7 +195,7 @@ describe('Test collection filtering', function () {
     it('create several dummy api keys', function () {
         var done = canary();
 
-        var createPromise = $.when(
+        var createPromise = Promise.all([
             new girder.models.ApiKeyModel({ name: 'filterTest0' }).save(),
             new girder.models.ApiKeyModel({ name: 'filterTest1' }).save(),
             new girder.models.ApiKeyModel({ name: 'filterTest2' }).save(),
@@ -206,7 +206,7 @@ describe('Test collection filtering', function () {
             new girder.models.ApiKeyModel({ name: 'filterTest7' }).save(),
             new girder.models.ApiKeyModel({ name: 'filterTest8' }).save(),
             new girder.models.ApiKeyModel({ name: 'filterTest9' }).save()
-        );
+        ]);
 
         var filteredCollection;
 
@@ -222,7 +222,7 @@ describe('Test collection filtering', function () {
             return filteredCollection.fetch();
         });
 
-        $.when(createPromise, fetchPromise).done(function () {
+        Promise.all([createPromise, fetchPromise]).done(function () {
             expect(filteredCollection.length).toBe(10);
         }).fail(failIfError).always(done);
 

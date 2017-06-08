@@ -132,10 +132,16 @@ function __restRequest(opts) {
  */
 var restRequestMock = null;
 function restRequest() {
+	Promise.prototype.done = Promise.prototype.then;
+	Promise.prototype.fail = Promise.prototype.catch;
+	Promise.prototype.always = function(func){
+	    return this.then(func,func);
+	}
+
     if (restRequestMock) {
         return restRequestMock.apply(this, arguments);
     }
-    return __restRequest.apply(this, arguments);
+    return Promise.resolve(__restRequest.apply(this, arguments));
 }
 function mockRestRequest(mock) {
     restRequestMock = mock;

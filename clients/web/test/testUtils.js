@@ -1209,12 +1209,12 @@ $(function () {
     document.location.search.substring(1).split('&').forEach(function (query) {
         query = query.split('=');
         if (query.length > 1 && query[0] === 'spec') {
-            specs.push($.getScript(decodeURIComponent(query[1])));
+            specs.push(Promise.resolve($.getScript(decodeURIComponent(query[1]))));
         }
     });
     if (specs.length) {
-        $.when.apply($, specs)
-            .done(function () {
+        Promise.all(specs)
+            .then(function () {
                 window.jasmine.getEnv().execute();
             });
     }

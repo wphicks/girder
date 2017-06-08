@@ -32,7 +32,6 @@ module.exports = function (grunt) {
             test: {
                 files: {
                     'clients/web/static/built/testing/testing.min.js': [
-                        'node_modules/core-js/client/shim.js',
                         'clients/web/test/lib/jasmine-1.3.1/jasmine.js',
                         'clients/web/test/lib/jasmine-1.3.1/ConsoleReporter.js',
                         'clients/web/test/testUtils.js'
@@ -58,6 +57,9 @@ module.exports = function (grunt) {
             pretty: true
         });
         fs.writeFileSync('clients/web/static/built/testing/testEnv.html', fn({
+            jsPolyfill: [
+                'node_modules/core-js/client/shim.js',
+            ],
             cssFiles: [
                 '/clients/web/static/built/fontello/css/fontello.css',
                 '/clients/web/static/built/girder_lib.min.css',

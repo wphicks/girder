@@ -25,7 +25,7 @@ router.route('item_task/:id/run', (id, params) => {
         promises.push(job.fetch());
     }
 
-    $.when.apply($, promises).done(() => {
+    Promise.all(promises).done(() => {
         events.trigger('g:navigateTo', TaskRunView, {
             model: item,
             initialValues: job && job.get('itemTaskBindings')
