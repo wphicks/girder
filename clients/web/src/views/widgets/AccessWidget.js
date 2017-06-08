@@ -83,7 +83,7 @@ var AccessWidget = View.extend({
             this.flagList = [];
         }
 
-        Promsie.all([
+        Promise.all([
             flagListPromise,
             this.model.fetchAccess()
         ]).then(() => {
