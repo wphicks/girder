@@ -69,7 +69,7 @@ function __restRequest(opts) {
                 /* We expected this abort, so do nothing. */
                 return;
             } else if (error.status === 500 && error.responseJSON &&
-                       error.responseJSON.type === 'girder') {
+                error.responseJSON.type === 'girder') {
                 info = {
                     text: error.responseJSON.message,
                     type: 'warning',
@@ -79,8 +79,8 @@ function __restRequest(opts) {
             } else if (status === 'parsererror') {
                 info = {
                     text: 'A parser error occurred while communicating with the ' +
-                          'server (did you use the correct value for `dataType`?). ' +
-                          'Details have been logged in the console.',
+                    'server (did you use the correct value for `dataType`?). ' +
+                    'Details have been logged in the console.',
                     type: 'danger',
                     timeout: 5000,
                     icon: 'attention'
@@ -88,7 +88,7 @@ function __restRequest(opts) {
             } else {
                 info = {
                     text: 'An error occurred while communicating with the ' +
-                          'server. Details have been logged in the console.',
+                    'server. Details have been logged in the console.',
                     type: 'danger',
                     timeout: 5000,
                     icon: 'attention'
@@ -107,8 +107,8 @@ function __restRequest(opts) {
     opts = _.extend(defaults, opts);
 
     var token = opts.girderToken ||
-                getCurrentToken() ||
-                cookie.find('girderToken');
+        getCurrentToken() ||
+        cookie.find('girderToken');
     if (token) {
         opts.headers = opts.headers || {};
         opts.headers['Girder-Token'] = token;
@@ -131,17 +131,22 @@ function __restRequest(opts) {
  * to mock restRequest nonetheless, since it is likely to be mocked the most.
  */
 var restRequestMock = null;
-function restRequest() {
-	Promise.prototype.done = Promise.prototype.then;
-	Promise.prototype.fail = Promise.prototype.catch;
-	Promise.prototype.always = function(func){
-	    return this.then(func,func);
-	}
+function restRequest(opts) {
+    Promise.prototype.done = Promise.prototype.then;
+    Promise.prototype.fail = Promise.prototype.catch;
+    Promise.prototype.always = function (func) {
+        return this.then(func, func);
+    }
 
     if (restRequestMock) {
         return restRequestMock.apply(this, arguments);
     }
-    return Promise.resolve(__restRequest.apply(this, arguments));
+    if (opts.async) {
+        return Promise.resolve(__restRequest.apply(this, arguments));
+    }
+    else {
+        return __restRequest.apply(this, arguments);
+    }
 }
 function mockRestRequest(mock) {
     restRequestMock = mock;
