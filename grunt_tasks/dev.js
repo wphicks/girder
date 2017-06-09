@@ -58,7 +58,7 @@ module.exports = function (grunt) {
         });
         fs.writeFileSync('clients/web/static/built/testing/testEnv.html', fn({
             jsPolyfill: [
-                'node_modules/core-js/client/shim.js',
+                'node_modules/core-js/client/shim.js'
             ],
             cssFiles: [
                 '/clients/web/static/built/fontello/css/fontello.css',

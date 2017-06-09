@@ -136,15 +136,14 @@ function restRequest(opts) {
     Promise.prototype.fail = Promise.prototype.catch;
     Promise.prototype.always = function (func) {
         return this.then(func, func);
-    }
+    };
 
     if (restRequestMock) {
         return restRequestMock.apply(this, arguments);
     }
     if (opts.async) {
         return Promise.resolve(__restRequest.apply(this, arguments));
-    }
-    else {
+    } else {
         return __restRequest.apply(this, arguments);
     }
 }
