@@ -24,13 +24,14 @@ const paths = require('./webpack.paths.js');
 
 module.exports = function (grunt) {
     // Get and validate options
-    const environment = grunt.option('env') || 'dev';
+    const progress = !grunt.option('no-progress');
+    const isWatch = grunt.option('watch');
+    // Set environment to 'dev' if in watch mode, or as a default; otherwise get as a Grunt option
+    const environment = isWatch ? 'dev' : (grunt.option('env') || 'dev');
     if (['dev', 'prod'].indexOf(environment) === -1) {
         grunt.fatal('The "env" argument must be either "dev" or "prod".');
     }
-    const progress = !grunt.option('no-progress');
     const isDev = environment === 'dev';
-    const isWatch = grunt.option('watch');
 
     // Set some environment variables
     if (!process.env.BABEL_ENV) {
@@ -55,6 +56,11 @@ module.exports = function (grunt) {
                 debug: true
             })
         ]);
+        if (isWatch) {
+            // When "watch" is enabled for webpack, grunt-webpack will intelligently set its own
+            // options for "keepalive" and "failOnError"
+            webpackConfig.watch = true;
+        }
     } else {
         // "devtool" is off by default
         webpackConfig.cache = false;
@@ -76,11 +82,6 @@ module.exports = function (grunt) {
                 }
             })
         ]);
-    }
-    if (isWatch) {
-        // When "watch" is enabled for webpack, grunt-webpack will intelligently set its own options
-        // for "keepalive" and "failOnError"
-        webpackConfig.watch = true;
     }
 
     // Add extra config options for grunt-webpack
