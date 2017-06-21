@@ -36,22 +36,6 @@ function fileLoader() {
     };
 }
 
-function _coverageConfig() {
-    try {
-        var istanbulPlugin = require.resolve('babel-plugin-istanbul');
-        return {
-            plugins: [[
-                istanbulPlugin, {
-                    exclude: ['**/*.pug', '**/*.jade', 'node_modules/**/*']
-                }
-            ]]
-        };
-    } catch (e) {
-        // We won't have the istanbul plugin installed in a prod env.
-        return {};
-    }
-}
-
 var loaderPaths = [path.resolve('clients', 'web', 'src')];
 var loaderPathsNodeModules = loaderPaths.concat([path.resolve('node_modules')]);
 
@@ -86,7 +70,17 @@ module.exports = {
                         options: {
                             presets: [es2015Preset],
                             env: {
-                                cover: _coverageConfig()
+                                cover: {
+                                    plugins: [
+                                        ['istanbul', {
+                                            exclude: [
+                                                '**/*.pug',
+                                                '**/*.jade',
+                                                'node_modules/**/*'
+                                            ]
+                                        }]
+                                    ]
+                                }
                             }
                         }
                     }
