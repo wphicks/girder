@@ -25,7 +25,6 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var paths = require('./webpack.paths.js');
-var es2015Preset = require.resolve('babel-preset-es2015');
 
 function fileLoader() {
     return {
@@ -68,7 +67,7 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: [es2015Preset],
+                            presets: ['es2015'],
                             env: {
                                 cover: {
                                     plugins: [
@@ -128,7 +127,7 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: [es2015Preset]
+                            presets: ['es2015']
                         }
                     },
                     'pug-loader'
