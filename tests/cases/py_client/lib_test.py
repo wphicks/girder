@@ -427,8 +427,10 @@ class PythonClientTestCase(base.TestCase):
         self.assertEqual(file['mimeType'], 'text/plain')
 
         # Test uploading to a folder
-        self.client.uploadFileToFolder(
-            str(self.publicFolder['_id']), path, reference='test4_reference')
+        with open(path, 'rb') as fh:
+            self.client.uploadFileToFolder(
+                str(self.publicFolder['_id']), fh, os.path.basename(path), os.path.getsize(path),
+                reference='test4_reference')
         self.assertEqual(len(eventList), 6)
         self.assertEqual(eventList[-1]['upload']['reference'], 'test4_reference')
         self.assertNotEqual(eventList[2]['file']['_id'],
