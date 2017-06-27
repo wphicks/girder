@@ -63,6 +63,7 @@ install_reqs = [
     'bcrypt',
     'boto3',
     'CherryPy',
+    'dogpile.cache',
     'filelock',
     'jsonschema',
     'Mako',
