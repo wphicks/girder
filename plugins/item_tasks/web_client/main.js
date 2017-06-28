@@ -13,6 +13,7 @@ import JobModel from 'girder_plugins/jobs/models/JobModel';
 import * as itemTasks from 'girder_plugins/item_tasks';
 
 import './routes';
+import './views/FileListWidget';
 
 registerPluginNamespace('item_tasks', itemTasks);
 
