@@ -17,9 +17,9 @@ router.route('item_tasks', 'itemTaskList', () => {
 });
 
 router.route('item_task/:id/run', (id, params) => {
-    const item = new ItemModel({_id: id});
+    const itemTask = new ItemModel({_id: id});
     let job = null;
-    const promises = [item.fetch()];
+    const promises = [itemTask.fetch()];
 
     if (params.fromJob) {
         job = new JobModel({_id: params.fromJob});
@@ -28,7 +28,7 @@ router.route('item_task/:id/run', (id, params) => {
 
     $.when.apply($, promises).done(() => {
         events.trigger('g:navigateTo', TaskRunView, {
-            model: item,
+            model: itemTask,
             initialValues: job && job.get('itemTaskBindings')
         }, {
             renderNow: true
