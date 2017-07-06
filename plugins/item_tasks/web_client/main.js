@@ -11,9 +11,9 @@ import ItemView from 'girder/views/body/ItemView';
 import { registerPluginNamespace } from 'girder/pluginUtils';
 import JobModel from 'girder_plugins/jobs/models/JobModel';
 import * as itemTasks from 'girder_plugins/item_tasks';
+import router from 'girder/router';
 
 import './routes';
-import './views/FileListWidget';
 
 registerPluginNamespace('item_tasks', itemTasks);
 
@@ -50,6 +50,7 @@ wrap(ItemView, 'render', function (render) {
     return render.call(this);
 });
 
+// "Configure Task" button in Actions drop down menu
 import ConfigureTasksDialog from './views/ConfigureTasksDialog';
 ItemView.prototype.events['click .g-configure-item-task'] = function () {
     if (!this.configureTaskDialog) {
@@ -60,6 +61,25 @@ ItemView.prototype.events['click .g-configure-item-task'] = function () {
         });
     }
     this.configureTaskDialog.render();
+};
+
+// "Select Task" button in Actions drop down menu
+import SelectTaskView from './views/SelectTaskView';
+ItemView.prototype.events['click a.g-select-item-task'] = function (e) {
+    var cid = $(e.currentTarget).parent().attr('file-cid');
+
+    new SelectTaskView({
+        el: $('#g-dialog-container'),
+        parentView: this,
+        item: this.model
+    }).once('g:selected', function (params) {
+        console.log('navigating after selected');
+        let itemId = params.itemId;
+        let taskId = params.taskId;
+
+        Backbone.history.fragment = null;
+        router.navigate('item_task/' + taskId + '/run?itemId=' + itemId, {trigger: true});
+    }, this).render();
 };
 
 import hierarchyMenuModTemplate from './templates/hierarchyMenuMod.pug';

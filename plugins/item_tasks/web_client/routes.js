@@ -1,6 +1,7 @@
 /* eslint-disable import/first */
 
 import $ from 'jquery';
+import _ from 'underscore';
 
 import router from 'girder/router';
 import events from 'girder/events';
@@ -19,6 +20,7 @@ router.route('item_tasks', 'itemTaskList', () => {
 router.route('item_task/:id/run', (id, params) => {
     const itemTask = new ItemModel({_id: id});
     let job = null;
+    let item = null;
     const promises = [itemTask.fetch()];
 
     if (params.fromJob) {
@@ -26,10 +28,42 @@ router.route('item_task/:id/run', (id, params) => {
         promises.push(job.fetch());
     }
 
-    $.when.apply($, promises).done(() => {
+    if (params.itemId) {
+        item = new ItemModel({_id: params.itemId});
+        promises.push(item.fetch());
+    }
+
+    $.when(...promises).done(() => {
+        let initialValues = {};
+
+        if (params.fromJob && job.has('itemTaskBindings')) {
+            initialValues = job.get('itemTaskBindings');
+        }
+
+        if (params.itemId) {
+            let prefilledItemId = params.itemId;
+            let itemTaskSpec = itemTask.get('meta').itemTaskSpec;
+
+            let fileInputSpecs = _.filter(itemTaskSpec.inputs, (inputSpec) => {
+                return inputSpec['type'] === 'file';
+            });
+            if (fileInputSpecs.length === 1) {
+                let fileInputSpec = fileInputSpecs[0];
+                initialValues.inputs = initialValues.inputs || {};
+                initialValues.inputs[fileInputSpec.id] = {
+                    mode: 'girder',
+                    resource_type: 'item',
+                    id: prefilledItemId,
+                    fileName: item.name()
+                };
+            } else {
+                console.log('Selected task has wrong number of file inputs.')
+            }
+        }
+
         events.trigger('g:navigateTo', TaskRunView, {
             model: itemTask,
-            initialValues: job && job.get('itemTaskBindings')
+            initialValues: initialValues
         }, {
             renderNow: true
         });
