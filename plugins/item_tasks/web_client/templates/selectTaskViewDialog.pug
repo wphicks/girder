@@ -1,0 +1,19 @@
+.modal-dialog
+  .modal-content
+    form#g-select-task-form.modal-form(role="form")
+      .modal-header
+        button.close(data-dismiss="modal", aria-hidden="true", type="button") &times;
+        h4.modal-title Select task
+        .g-dialog-subtitle
+          i.icon-doc-inv
+          |  #{item.get('name')}
+      .modal-body
+        label Select task
+        .g-task-custom-target-container
+          .g-target-result-container
+          .g-search-field-container
+        .g-validation-failed-message
+      .modal-footer
+        a.btn.btn-small.btn-default(data-dismiss="modal") Close
+        button.g-submit-select-task.btn.btn-small.btn-primary(type="submit")
+          |  Configure
