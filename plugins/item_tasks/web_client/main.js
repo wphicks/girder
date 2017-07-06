@@ -66,8 +66,6 @@ ItemView.prototype.events['click .g-configure-item-task'] = function () {
 // "Select Task" button in Actions drop down menu
 import SelectTaskView from './views/SelectTaskView';
 ItemView.prototype.events['click a.g-select-item-task'] = function (e) {
-    var cid = $(e.currentTarget).parent().attr('file-cid');
-
     new SelectTaskView({
         el: $('#g-dialog-container'),
         parentView: this,
@@ -77,7 +75,6 @@ ItemView.prototype.events['click a.g-select-item-task'] = function (e) {
         let itemId = params.itemId;
         let taskId = params.taskId;
 
-        Backbone.history.fragment = null;
         router.navigate('item_task/' + taskId + '/run?itemId=' + itemId, {trigger: true});
     }, this).render();
 };

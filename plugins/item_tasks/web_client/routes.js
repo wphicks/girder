@@ -44,9 +44,7 @@ router.route('item_task/:id/run', (id, params) => {
             let prefilledItemId = params.itemId;
             let itemTaskSpec = itemTask.get('meta').itemTaskSpec;
 
-            let fileInputSpecs = _.filter(itemTaskSpec.inputs, (inputSpec) => {
-                return inputSpec['type'] === 'file';
-            });
+            let fileInputSpecs = _.where(itemTaskSpec.inputs, {'type': 'file'});
             if (fileInputSpecs.length === 1) {
                 let fileInputSpec = fileInputSpecs[0];
                 initialValues.inputs = initialValues.inputs || {};
@@ -57,7 +55,7 @@ router.route('item_task/:id/run', (id, params) => {
                     fileName: item.name()
                 };
             } else {
-                console.log('Selected task has wrong number of file inputs.')
+                console.log('Selected task has wrong number of file inputs.');
             }
         }
 

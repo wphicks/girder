@@ -1,5 +1,3 @@
-import _ from 'underscore';
-
 import SearchFieldWidget from 'girder/views/widgets/SearchFieldWidget';
 import View from 'girder/views/View';
 
@@ -29,7 +27,6 @@ var SelectTaskView = View.extend({
 
     initialize: function (settings) {
         this.item = settings.item;
-        this.taskId;
 
         this.searchWidget = new SearchFieldWidget({
             placeholder: 'Start typing a task name...',
